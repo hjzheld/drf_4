@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
 )
-from users.serializers import CustomTokenObtainPairSerializer, UserSerializer
+from users.serializers import CustomTokenObtainPairSerializer, UserSerializer, UserProfileSerializer
 from .models import User
 
 
@@ -44,3 +44,10 @@ class FollowView(APIView):
         else:
             you.followers.add(me)
             return Response('팔로우 완료', status=status.HTTP_200_OK)
+
+
+class ProfileView(APIView):
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
